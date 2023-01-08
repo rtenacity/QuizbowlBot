@@ -10,15 +10,24 @@ intents.message_content = True
 with open('token.txt','r') as f: #reading token from file
     token = f.read()
 
-client = commands.Bot(command_prefix = ".", intents=intents)
+client = commands.Bot(command_prefix = ".", intents=intents, help_command=None)
 
 @client.event
 async def on_ready():
 
-    await client.change_presence(activity=discord.Game('!qb [difficulty] [category]'))
+    await client.change_presence(activity=discord.Game('.qb [difficulty] [category]'))
     print('Connected to bot: {}'.format(client.user.name))
     print('Bot ID: {}'.format(client.user.id))
 
+@client.command()
+async def help(ctx):
+    embed=discord.Embed(title=".help Menu", color=0x0062ff)
+    embed.add_field(name=".qb", value="Command used to start a session. Takes a difficulty argument and a categories argument.", inline=False)
+    embed.add_field(name="Difficulty", value="Used to set the difficulty of the questions. Ex: 1-5, 7, 8-10, etc. Use * for all difficulties.", inline=True)
+    embed.add_field(name="Categories", value="Used to set the categories of the questions. Ex: science,history,mythology, etc. Don't leave a space in between the categories. For a full list of categories, see https://pastebin.com/McVDGDXg.", inline=True)
+    embed.add_field(name="Example", value=".qb 1-4 history,science", inline=False)
+    embed.set_footer(text="created by rtenacity#1388")
+    await ctx.send(embed=embed)
 
 @client.command()
 async def qb(ctx, difficulty_input="", category_input=""):
