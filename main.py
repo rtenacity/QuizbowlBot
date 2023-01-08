@@ -97,7 +97,16 @@ async def qb(ctx, difficulty_input="", category_input=""):
 
                 if unsure.content == "y":
                     user_dict[ctx.author.id] += 10
-
+                if answer.content == ".end":
+                    print(user_dict[ctx.author.id])
+                    ppb = user_dict[ctx.author.id] / q
+                    ppb = round(ppb, 2)
+                    embed_end=discord.Embed(color=0x0062ff)
+                    embed_end.add_field(name="End", value=f"**{ctx.author}** has ended their session with a PPB of {ppb}", inline=False)
+                    await ctx.send(embed=embed_end)
+                    del user_dict[ctx.author.id]
+                    run = False
+                    break
                 else:
                     pass
 
