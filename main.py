@@ -97,7 +97,7 @@ async def qb(ctx, difficulty_input="", category_input=""):
 
                 if unsure.content == "y":
                     user_dict[ctx.author.id] += 10
-                if answer.content == ".end":
+                elif answer.content == ".end":
                     print(user_dict[ctx.author.id])
                     ppb = user_dict[ctx.author.id] / q
                     ppb = round(ppb, 2)
