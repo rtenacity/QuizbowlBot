@@ -1,6 +1,6 @@
 import qbreader
 import re
-from nltk import edit_distance
+import nltk
 
 def split_difficulty(difficulty_input):
     difficulty_input_str_list = difficulty_input.split("-")
@@ -29,12 +29,16 @@ def remove_bracketed(string):
     pattern = r'\[[^\]]*\]|\([^\)]*\)'
     return re.sub(pattern, '', string)
 
+
+#    correct_answer = remove_bracketed(correct_answer)
 def is_close_answer(response, correct_answer, threshold=0.1):
+    # Tokenize the correct answer and remove stop words
+    stop_words = set(nltk.corpus.stopwords.words("english"))
+
     correct_answer = correct_answer.lower()
-    correct_answer = remove_bracketed(correct_answer)
     response = response.lower()
-    # Split the question, correct answer, and response into lists of words
-    correct_answer_words = correct_answer.split()
+    correct_answer_words = [word for word in correct_answer.split() if word.lower() not in stop_words]
+    # Split the response into a list of words
     response_words = response.split()
     num_matching_words = 0
     # Calculate the number of words that match between the correct answer and the response
@@ -42,9 +46,19 @@ def is_close_answer(response, correct_answer, threshold=0.1):
         # Iterate over the words in the response
         for response_word in response_words:
             # If the words match or are close enough (e.g. differ by one letter), increment the counter
-            if correct_answer_word == response_word or edit_distance(correct_answer_word, response_word) == 2:
+            if correct_answer_word == response_word or nltk.edit_distance(correct_answer_word, response_word) == 2:
                 num_matching_words += 1
                 break  # Break out of the inner loop so we don't count the same word multiple times
+    # Calculate the ratio of matching words to total words in the correct answer
+    matching_ratio = num_matching_words / len(correct_answer_words)
+    # Return True if the matching ratio is above the threshold, False otherwise
+    return matching_ratio >= threshold
+#This modified function first removes any stop words from the correct answer using the nltk library, and then compares the remaining words to the words in the response to determine if the response is a "close" answer.
+
+
+
+
+
 
     # Calculate the ratio of matching words to total words in the correct answer
     matching_ratio = num_matching_words / len(correct_answer_words)

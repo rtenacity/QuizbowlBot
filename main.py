@@ -14,6 +14,7 @@ client = commands.Bot(command_prefix = "!", intents=intents)
 
 @client.event
 async def on_ready():
+
     await client.change_presence(activity=discord.Game('!qb [difficulty] [category]'))
     print('Connected to bot: {}'.format(client.user.name))
     print('Bot ID: {}'.format(client.user.id))
@@ -21,35 +22,46 @@ async def on_ready():
 
 @client.command()
 async def qb(ctx, difficulty_input="", category_input=""):
+    
     def check(m: discord.Message): 
         return m.author.id == ctx.author.id and m.channel.id == ctx.channel.id 
+
     if ctx.author.id not in user_dict:
         user_dict[ctx.author.id] = 0
     else:
         await ctx.send("You are already in a game!")
-    run = True
-    q = 0
+
+    run, q = True, 0; 
     difficulty_list, category_list = [], []
+
     if difficulty_input:
         if difficulty_input == "*":
             difficulty_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         else:
             difficulty_list = bot_function.split_difficulty(difficulty_input)
+
     if category_input:
         category_list = bot_function.split_categories(category_input)
+
     while run == True:
-        user_question = bot_function.fetch_question(category_list, difficulty_list)
-        q+=1
-        print(category_list)
+
+        user_question = bot_function.fetch_question(category_list, difficulty_list); q+=1
+
         embed_title=discord.Embed(title=user_question['setName'], description=user_question['leadin'], color=0x0062ff)
+        embed_title.set_footer(text=f"Requested by {ctx.author} | Difficulty: {user_question['difficulty']} | Category: {user_question['category']}")
         await ctx.send(embed=embed_title)
+
         for i in range(len(user_question['parts'])):
+
             embed_question=discord.Embed(color=0x0062ff)
             embed_question.add_field(name=str(i+1), value=user_question['parts'][i], inline=False)
+            embed_question.set_footer(text=f"Requested by {ctx.author} | Difficulty: {user_question['difficulty']} | Category: {user_question['category']}")
             await ctx.send(embed=embed_question)
             answer = await client.wait_for('message', check = check)
+
             if answer.content == "!qb":
                 pass
+
             if answer.content == "!end":
                 print(user_dict[ctx.author.id])
                 ppb = user_dict[ctx.author.id] / q
@@ -60,18 +72,22 @@ async def qb(ctx, difficulty_input="", category_input=""):
                 del user_dict[ctx.author.id]
                 run = False
                 break
+
             if bot_function.is_close_answer(answer.content, user_question['answers'][i]):
                 user_dict[ctx.author.id] += 10
                 embed_correct=discord.Embed(color=0x4dff00)
                 embed_correct.add_field(name="Correct", value=f"{user_question['answers'][i]}", inline=False)
                 await ctx.send(embed=embed_correct)
+
             else:
                 embed_incorrect=discord.Embed(color=0xff0000)
                 embed_incorrect.add_field(name="Were you correct? (y/n)", value=f"{user_question['answers'][i]}", inline=False)
                 await ctx.send(embed=embed_incorrect)
                 unsure = await client.wait_for('message', check = check)
+
                 if unsure.content == "y":
                     user_dict[ctx.author.id] += 10
+
                 else:
                     pass
 
