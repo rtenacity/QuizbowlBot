@@ -10,7 +10,7 @@ intents.message_content = True
 with open('token.txt','r') as f: #reading token from file
     token = f.read()
 
-client = commands.Bot(command_prefix = "!", intents=intents)
+client = commands.Bot(command_prefix = ".", intents=intents)
 
 @client.event
 async def on_ready():
@@ -59,10 +59,10 @@ async def qb(ctx, difficulty_input="", category_input=""):
             await ctx.send(embed=embed_question)
             answer = await client.wait_for('message', check = check)
 
-            if answer.content == "!qb":
+            if answer.content == ".qb":
                 pass
 
-            if answer.content == "!end":
+            if answer.content == ".end":
                 print(user_dict[ctx.author.id])
                 ppb = user_dict[ctx.author.id] / q
                 ppb = round(ppb, 2)
