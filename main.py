@@ -15,7 +15,7 @@ client = commands.Bot(command_prefix = ".", intents=intents, help_command=None)
 @client.event
 async def on_ready():
 
-    await client.change_presence(activity=discord.Game('.qb [difficulty] [category]'))
+    await client.change_presence(activity=discord.Game('.help'))
     print('Connected to bot: {}'.format(client.user.name))
     print('Bot ID: {}'.format(client.user.id))
 
