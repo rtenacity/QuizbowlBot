@@ -34,7 +34,7 @@ async def help(ctx):
 
 @client.command()
 async def qb(ctx, *args):
-    
+    print("sus")
     def check(m: discord.Message): 
         return m.author.id == ctx.author.id and m.channel.id == ctx.channel.id 
 
