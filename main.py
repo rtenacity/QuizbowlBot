@@ -66,51 +66,26 @@ async def qb(ctx, *args):
         category_list = bot_function.split_categories(category_input)
     if token == user_dict[ctx.author.id]['token']:
         while run == True:
+            try:
 
-            user_question = bot_function.fetch_question(category_list, difficulty_list); q+=1
+                user_question = bot_function.fetch_question(category_list, difficulty_list); q+=1
 
-            embed_title=discord.Embed(title=user_question['setName'], description=user_question['leadin'], color=0x0062ff)
-            embed_title.set_footer(text=f"Requested by {ctx.author} | Difficulty: {user_question['difficulty']} | Category: {user_question['category']}")
-            await ctx.send(embed=embed_title)
+                embed_title=discord.Embed(title=user_question['setName'], description=user_question['leadin'], color=0x0062ff)
+                embed_title.set_footer(text=f"Requested by {ctx.author} | Difficulty: {user_question['difficulty']} | Category: {user_question['category']}")
+                await ctx.send(embed=embed_title)
 
-            for i in range(len(user_question['parts'])):
+                for i in range(len(user_question['parts'])):
 
-                embed_question=discord.Embed(color=0x0062ff)
-                embed_question.add_field(name=str(i+1), value=user_question['parts'][i], inline=False)
-                embed_question.set_footer(text=f"Requested by {ctx.author} | Difficulty: {user_question['difficulty']} | Category: {user_question['category']}")
-                await ctx.send(embed=embed_question)
-                answer = await client.wait_for('message', check = check)
+                    embed_question=discord.Embed(color=0x0062ff)
+                    embed_question.add_field(name=str(i+1), value=user_question['parts'][i], inline=False)
+                    embed_question.set_footer(text=f"Requested by {ctx.author} | Difficulty: {user_question['difficulty']} | Category: {user_question['category']}")
+                    await ctx.send(embed=embed_question)
+                    answer = await client.wait_for('message', check = check)
 
-                if answer.content == ".qb":
-                    pass
+                    if answer.content == ".qb":
+                        pass
 
-                if answer.content == ".end":
-                    ppb = user_dict[ctx.author.id]['score'] / q
-                    ppb = round(ppb, 2)
-                    embed_end=discord.Embed(color=0x0062ff)
-                    embed_end.add_field(name="End", value=f"**{ctx.author}** has ended their session with a PPB of {ppb}", inline=False)
-                    await ctx.send(embed=embed_end)
-                    del user_dict[ctx.author.id]
-                    print(user_dict)
-                    run = False
-                    break
-
-                if bot_function.is_close_answer(answer.content, user_question['answers'][i]):
-                    user_dict[ctx.author.id]['score'] += 10
-                    embed_correct=discord.Embed(color=0x4dff00)
-                    embed_correct.add_field(name="Correct", value=f"{user_question['answers'][i]}", inline=False)
-                    await ctx.send(embed=embed_correct)
-
-                else:
-                    embed_incorrect=discord.Embed(color=0xff0000)
-                    embed_incorrect.add_field(name="Were you correct? (y/n)", value=f"{user_question['answers'][i]}", inline=False)
-                    await ctx.send(embed=embed_incorrect)
-                    unsure = await client.wait_for('message', check = check)
-
-                    if unsure.content == "y":
-                        user_dict[ctx.author.id]['score'] += 10
-
-                    elif unsure.content == ".end":
+                    if answer.content == ".end":
                         ppb = user_dict[ctx.author.id]['score'] / q
                         ppb = round(ppb, 2)
                         embed_end=discord.Embed(color=0x0062ff)
@@ -120,8 +95,39 @@ async def qb(ctx, *args):
                         print(user_dict)
                         run = False
                         break
+
+                    if bot_function.is_close_answer(answer.content, user_question['answers'][i]):
+                        user_dict[ctx.author.id]['score'] += 10
+                        embed_correct=discord.Embed(color=0x4dff00)
+                        embed_correct.add_field(name="Correct", value=f"{user_question['answers'][i]}", inline=False)
+                        await ctx.send(embed=embed_correct)
+
                     else:
-                        pass
+                        embed_incorrect=discord.Embed(color=0xff0000)
+                        embed_incorrect.add_field(name="Were you correct? (y/n)", value=f"{user_question['answers'][i]}", inline=False)
+                        await ctx.send(embed=embed_incorrect)
+                        unsure = await client.wait_for('message', check = check)
+
+                        if unsure.content == "y":
+                            user_dict[ctx.author.id]['score'] += 10
+
+                        elif unsure.content == ".end":
+                            ppb = user_dict[ctx.author.id]['score'] / q
+                            ppb = round(ppb, 2)
+                            embed_end=discord.Embed(color=0x0062ff)
+                            embed_end.add_field(name="End", value=f"**{ctx.author}** has ended their session with a PPB of {ppb}", inline=False)
+                            await ctx.send(embed=embed_end)
+                            del user_dict[ctx.author.id]
+                            print(user_dict)
+                            run = False
+                            break
+                        else:
+                            pass
+            except KeyError:
+                del user_dict[ctx.author.id]
+                await ctx.send("Invalid Parameters!")
+                run = False
+
 @client.command()
 async def kill(ctx):
     try:
