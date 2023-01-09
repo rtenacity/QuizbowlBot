@@ -90,12 +90,13 @@ async def qb(ctx, *args):
                     embed_end=discord.Embed(color=0x0062ff)
                     embed_end.add_field(name="End", value=f"**{ctx.author}** has ended their session with a PPB of {ppb}", inline=False)
                     await ctx.send(embed=embed_end)
-                    del user_dict[ctx.author.id]['score']
+                    del user_dict[ctx.author.id]
+                    print(user_dict)
                     run = False
                     break
 
                 if bot_function.is_close_answer(answer.content, user_question['answers'][i]):
-                    user_dict[ctx.author.id] += 10
+                    user_dict[ctx.author.id]['score'] += 10
                     embed_correct=discord.Embed(color=0x4dff00)
                     embed_correct.add_field(name="Correct", value=f"{user_question['answers'][i]}", inline=False)
                     await ctx.send(embed=embed_correct)
@@ -116,6 +117,7 @@ async def qb(ctx, *args):
                         embed_end.add_field(name="End", value=f"**{ctx.author}** has ended their session with a PPB of {ppb}", inline=False)
                         await ctx.send(embed=embed_end)
                         del user_dict[ctx.author.id]
+                        print(user_dict)
                         run = False
                         break
                     else:
