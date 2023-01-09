@@ -24,9 +24,10 @@ async def help(ctx):
     embed=discord.Embed(title=".help Menu", color=0x0062ff)
     embed.add_field(name=".qb", value="Command used to start a session. Takes a difficulty argument and a categories argument.", inline=False)
     embed.add_field(name="Difficulty", value="Used to set the difficulty of the questions. Ex: 1-5, 7, 8-10, etc. Use * for all difficulties.", inline=True)
-    embed.add_field(name="Categories", value="Used to set the categories of the questions. Ex: science, history, mythology, etc. USE FULL NAMES FOR CATEGORIES. For a full list of categories, see https://pastebin.com/McVDGDXg.", inline=True)
+    embed.add_field(name="Categories", value="Used to set the categories of the questions. Ex: science,history,mythology, etc. Don't leave a space in between the categories. For a full list of categories, see https://pastebin.com/McVDGDXg.", inline=True)
     embed.add_field(name=".end", value="Ends a session.", inline=False)
     embed.add_field(name=".kill", value="Ends all session(s) forcibly for a user. Used as a hard reset incase of duplicated sessions.", inline=False)
+    embed.add_field(name="Example", value=".qb 1-4 history,science", inline=False)
     embed.set_footer(text="created by rtenacity#1388")
     await ctx.send(embed=embed)
 

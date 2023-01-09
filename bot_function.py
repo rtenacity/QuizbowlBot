@@ -1,6 +1,18 @@
 import qbreader
 import re
 import nltk
+import secrets
+
+def generate_token():
+    return secrets.token_hex(16)
+
+def search_list(string_list):
+    results = []
+    for s in string_list:
+        if re.search(r'[-\d]', s):  # check if s contains a hyphen or a digit
+            results.append(s)
+    return results
+
 
 def split_difficulty(difficulty_input):
     difficulty_input_str_list = difficulty_input.split("-")
