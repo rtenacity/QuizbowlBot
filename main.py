@@ -1,6 +1,7 @@
 import qbreader
 import bot_function
 import discord
+import json
 from discord.ext import commands
 user_dict = {}
 
@@ -67,7 +68,7 @@ async def qb(ctx, *args):
     if token == user_dict[ctx.author.id]['token']:
         while run == True:
             try:
-
+                data = {"response": "", "answer": "", "correct": ""}
                 user_question = bot_function.fetch_question(category_list, difficulty_list); q+=1
 
                 embed_title=discord.Embed(title=user_question['setName'], description=user_question['leadin'], color=0x0062ff)
@@ -75,13 +76,13 @@ async def qb(ctx, *args):
                 await ctx.send(embed=embed_title)
 
                 for i in range(len(user_question['parts'])):
-
                     embed_question=discord.Embed(color=0x0062ff)
                     embed_question.add_field(name=str(i+1), value=user_question['parts'][i], inline=False)
                     embed_question.set_footer(text=f"Requested by {ctx.author} | Difficulty: {user_question['difficulty']} | Category: {user_question['category']}")
                     await ctx.send(embed=embed_question)
                     answer = await client.wait_for('message', check = check)
-
+                    data['response'] = answer.content
+                    data['answer'] = user_question['answers'][i]
                     if answer.content == ".qb":
                         pass
 
@@ -101,6 +102,7 @@ async def qb(ctx, *args):
                         embed_correct=discord.Embed(color=0x4dff00)
                         embed_correct.add_field(name="Correct", value=f"{user_question['answers'][i]}", inline=False)
                         await ctx.send(embed=embed_correct)
+                        data["correct"] = True
 
                     else:
                         embed_incorrect=discord.Embed(color=0xff0000)
@@ -109,6 +111,7 @@ async def qb(ctx, *args):
                         unsure = await client.wait_for('message', check = check)
 
                         if unsure.content == "y":
+                            data["correct"] = True
                             user_dict[ctx.author.id]['score'] += 10
 
                         elif unsure.content == ".end":
@@ -122,7 +125,12 @@ async def qb(ctx, *args):
                             run = False
                             break
                         else:
-                            pass
+                            data["correct"] = False
+                    with open("questions.csv", "a") as file:
+                        json.dump(data, file)
+                        file.write(", \n")
+                    print(data)
+                
             except KeyError:
                 del user_dict[ctx.author.id]
                 await ctx.send("Invalid Parameters!")

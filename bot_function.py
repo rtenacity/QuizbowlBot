@@ -13,7 +13,6 @@ def search_list(string_list):
             results.append(s)
     return results
 
-
 def split_difficulty(difficulty_input):
     difficulty_input_str_list = difficulty_input.split("-")
     difficulty_input_list = [int(x) for x in difficulty_input_str_list]
@@ -46,7 +45,6 @@ def remove_bracketed(string):
 def is_close_answer(response, correct_answer, threshold=0.1):
     # Tokenize the correct answer and remove stop words
     stop_words = set(nltk.corpus.stopwords.words("english"))
-
     correct_answer = correct_answer.lower()
     response = response.lower()
     correct_answer_words = [word for word in correct_answer.split() if word.lower() not in stop_words]
@@ -66,17 +64,6 @@ def is_close_answer(response, correct_answer, threshold=0.1):
     # Return True if the matching ratio is above the threshold, False otherwise
     return matching_ratio >= threshold
 #This modified function first removes any stop words from the correct answer using the nltk library, and then compares the remaining words to the words in the response to determine if the response is a "close" answer.
-
-
-
-
-
-
-    # Calculate the ratio of matching words to total words in the correct answer
-    matching_ratio = num_matching_words / len(correct_answer_words)
-
-    # Return whether the matching ratio is above the threshold
-    return matching_ratio >= threshold
 
 def is_close(response, correct_answer):
     correct_words = correct_answer.split()
