@@ -126,7 +126,7 @@ async def qb(ctx, *args):
                             break
                         else:
                             data["correct"] = False
-                    with open("questions.csv", "a") as file:
+                    with open("questions.csvw", "a") as file:
                         json.dump(data, file)
                         file.write(", \n")
                     print(data)
