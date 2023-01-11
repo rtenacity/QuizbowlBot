@@ -99,7 +99,7 @@ async def qb(ctx, *args):
                         embed_correct=discord.Embed(color=0x4dff00)
                         embed_correct.add_field(name="Correct", value=f"{user_question['answers'][i]}", inline=False)
                         await ctx.send(embed=embed_correct)
-                        data["correct"] = True
+                        data["correct"] = 1
 
                     else:
                         embed_incorrect=discord.Embed(color=0xff0000)
@@ -108,7 +108,7 @@ async def qb(ctx, *args):
                         unsure = await client.wait_for('message', check = check)
 
                         if unsure.content == "y":
-                            data["correct"] = True
+                            data["correct"] = 1
                             user_dict[ctx.author.id]['score'] += 10
 
                         elif unsure.content == ".end":
@@ -118,10 +118,11 @@ async def qb(ctx, *args):
                             embed_end.add_field(name="End", value=f"**{ctx.author}** has ended their session with a PPB of {ppb}", inline=False)
                             await ctx.send(embed=embed_end)
                             del user_dict[ctx.author.id]
-                            run = False
+                            run = 0
                             break
                         else:
                             data["correct"] = False
+
                     with open("questions.csv", "a") as file:
                         json.dump(data, file)
                         file.write(", \n")
