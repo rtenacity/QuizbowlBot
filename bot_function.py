@@ -77,7 +77,7 @@ def is_close_answer(response, correct_answer, threshold=0.1):
         # Iterate over the words in the response
         for response_word in response_words:
             # If the words match or are close enough (e.g. differ by one letter), increment the counter
-            if correct_answer_word == response_word or nltk.edit_distance(correct_answer_word, response_word) == 2:
+            if correct_answer_word == response_word or nltk.edit_distance(correct_answer_word, response_word) <= 2:
                 num_matching_words += 1
                 break  # Break out of the inner loop so we don't count the same word multiple times
     # Calculate the ratio of matching words to total words in the correct answer
