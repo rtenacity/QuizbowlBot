@@ -21,8 +21,29 @@ def split_difficulty(difficulty_input):
 def split_categories(categories_input):
     categories_cleaned = categories_input.replace(" ", "")
     categories_input_str_list = categories_cleaned.split(",")
-    categories_input_list = [x.capitalize() for x in categories_input_str_list]
-    return categories_input_list
+    categories_input_str_list = [x.capitalize() for x in categories_input_str_list]
+    for index, item in enumerate(categories_input_str_list):
+        if item == "Lit":
+            categories_input_str_list[index] = "Literature"
+        if item == "Fa":
+            categories_input_str_list[index] = "Fine Arts"
+        if item == "Myth":
+            categories_input_str_list[index] = "Mythology"
+        if item == "Sci":
+            categories_input_str_list[index] = "Science"
+        if item == "Ss":
+            categories_input_str_list[index] = "Social Science"
+        if item == "Geo":
+            categories_input_str_list[index] = "Geography"
+        if item == "Hist":
+            categories_input_str_list[index] = "History"
+        if item == "Rel":
+            categories_input_str_list[index] = "Religion"
+        if item == "Pop":
+            categories_input_str_list[index] = "Trash"
+        if item == "Phil":
+            categories_input_str_list[index] = "Philosophy"
+    return categories_input_str_list
 
 def fetch_question(categories=[], difficulty_array=[]):
     l = qbreader.random_question("bonus", difficulty_array, categories)
@@ -44,7 +65,7 @@ def remove_bracketed(string):
 #    correct_answer = remove_bracketed(correct_answer)
 def is_close_answer(response, correct_answer, threshold=0.1):
     # Tokenize the correct answer and remove stop words
-    stop_words = set(nltk.corpus.stopwords.words("english"))
+    stop_words = {"weren't", 'his', 'hasn', 'an', 'up', 'be', 'through', 'more', 'than', 'don', 'whom', 'on', "should've", 'against', 'himself', 'they', 'or', 'not', 'yours', 'now', 'with', 'wasn', 'for', 'yourselves', 'does', 'while', 'him', 's', 'after', 'he', 'shouldn', 'why', 'am', 'weren', 'and', 'between', 'from', 'haven', 'here', "it's", 'just', 'those', 'before', "wasn't", 'below', 'but', 'about', 'hadn', "she's", 'once', 'myself', 'again', 't', "don't", 'm', 'y', 'of', "hadn't", 'was', 'by', 've', 'what', 'into', "you've", 'mustn', 'too', 'shan', 'doesn', "aren't", 'this', 'only', "couldn't", 'yourself', 'couldn', 'same', 'being', 'further', 'then', 'it', 'when', "isn't", "doesn't", 'if', 'both', 'all', 'under', 'you', 'our', 'its', 'ain', 'will', 'i', 'at', 'me', 'll', 'own', 'no', 'above', "you'll", 'the', 'these', 'to', 'didn', 'needn', 'because', 'off', 'had', 'who', "shan't", 'been', 'very', "mightn't", 'having', 'mightn', "mustn't", 'that', 'any', 'in', 'few', 'which', 'so', "hasn't", 'until', 'are', 'a', 'where', 'wouldn', 'out', 'nor', 'has', 'won', 'aren', 'have', 'most', 'my', 're', 'your', 'other', "didn't", 'how', 'were', 'there', 'each', 'should', 'we', 'do', 'down', 'their', 'o', 'd', "needn't", 'ourselves', 'such', "you're", 'can', "won't", 'ma', "haven't", "you'd", 'over', 'some', "wouldn't", 'she', "shouldn't", 'ours', 'itself', 'as', 'her', 'is', 'theirs', 'herself', 'doing', 'isn', "that'll", 'hers', 'during', 'did', 'themselves', 'them', 'sea', 'lake', 'battle', 'war', 'river', 'mountain', 'city', 'country', 'continent', 'island', 'king', 'queen', 'prince', 'princess'}
     correct_answer = correct_answer.lower()
     response = response.lower()
     correct_answer_words = [word for word in correct_answer.split() if word.lower() not in stop_words]

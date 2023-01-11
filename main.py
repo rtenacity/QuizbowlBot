@@ -25,13 +25,11 @@ async def help(ctx):
     embed=discord.Embed(title=".help Menu", color=0x0062ff)
     embed.add_field(name=".qb", value="Command used to start a session. Takes a difficulty argument and a categories argument.", inline=False)
     embed.add_field(name="Difficulty", value="Used to set the difficulty of the questions. Ex: 1-5, 7, 8-10, etc. Use * for all difficulties.", inline=True)
-    embed.add_field(name="Categories", value="Used to set the categories of the questions. Ex: science, history, mythology, etc. USE FULL NAMES FOR CATEGORIES. For a full list of categories, see https://pastebin.com/McVDGDXg.", inline=True)
+    embed.add_field(name="Categories", value="Used to set the categories of the questions. Ex: science, history, mythology, etc. Shortcuts also available! For a full list of categories and shortcuts, see https://https://pastebin.com/V2WKbJca.", inline=True)
     embed.add_field(name=".end", value="Ends a session.", inline=False)
     embed.add_field(name=".kill", value="Ends all session(s) forcibly for a user. Used as a hard reset incase of duplicated sessions.", inline=False)
     embed.set_footer(text="created by rtenacity#1388")
     await ctx.send(embed=embed)
-
-
 
 @client.command()
 async def qb(ctx, *args):
@@ -93,7 +91,6 @@ async def qb(ctx, *args):
                         embed_end.add_field(name="End", value=f"**{ctx.author}** has ended their session with a PPB of {ppb}", inline=False)
                         await ctx.send(embed=embed_end)
                         del user_dict[ctx.author.id]
-                        print(user_dict)
                         run = False
                         break
 
@@ -121,7 +118,6 @@ async def qb(ctx, *args):
                             embed_end.add_field(name="End", value=f"**{ctx.author}** has ended their session with a PPB of {ppb}", inline=False)
                             await ctx.send(embed=embed_end)
                             del user_dict[ctx.author.id]
-                            print(user_dict)
                             run = False
                             break
                         else:
@@ -129,7 +125,6 @@ async def qb(ctx, *args):
                     with open("questions.csvw", "a") as file:
                         json.dump(data, file)
                         file.write(", \n")
-                    print(data)
                 
             except KeyError:
                 del user_dict[ctx.author.id]
