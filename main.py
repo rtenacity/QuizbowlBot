@@ -81,9 +81,16 @@ async def qb(ctx, *args):
                     answer = await client.wait_for('message', check = check)
                     data['response'] = answer.content
                     data['answer'] = user_question['answers'][i]
-                    if answer.content == ".qb":
+                    if answer.content.startswith(".qb"):
                         pass
-
+                    elif answer.content.startswith(".end"):
+                        pass
+                    elif answer.content.startswith(".kill"):
+                        pass
+                    elif answer.content.startswith(".help"):
+                        pass
+                    elif answer.content.startswith("//"):
+                        pass
                     if answer.content == ".end":
                         ppb = user_dict[ctx.author.id]['score'] / q
                         ppb = round(ppb, 2)
@@ -107,7 +114,10 @@ async def qb(ctx, *args):
                         await ctx.send(embed=embed_incorrect)
                         unsure = await client.wait_for('message', check = check)
 
-                        if unsure.content == "y":
+                        if answer.content.startswith(".qb"):
+                            pass
+
+                        elif unsure.content == "y":
                             data["correct"] = 1
                             user_dict[ctx.author.id]['score'] += 10
 
@@ -121,7 +131,7 @@ async def qb(ctx, *args):
                             run = 0
                             break
                         else:
-                            data["correct"] = False
+                            data["correct"] = 0
 
                     with open("questions.csv", "a") as file:
                         json.dump(data, file)
