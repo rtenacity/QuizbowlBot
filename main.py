@@ -81,15 +81,7 @@ async def qb(ctx, *args):
                     answer = await client.wait_for('message', check = check)
                     data['response'] = answer.content
                     data['answer'] = user_question['answers'][i]
-                    if answer.content.startswith(".qb"):
-                        pass
-                    elif answer.content.startswith(".end"):
-                        pass
-                    elif answer.content.startswith(".kill"):
-                        pass
-                    elif answer.content.startswith(".help"):
-                        pass
-                    elif answer.content.startswith("//"):
+                    if answer.content.startswith("//") or answer.content.startswith(".help") or answer.content.startswith(".kill") or answer.content.startswith(".end") or answer.content.startswith(".qb"):
                         answer = await client.wait_for('message', check = check)
                     if answer.content == ".end":
                         ppb = user_dict[ctx.author.id]['score'] / q
