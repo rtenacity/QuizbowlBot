@@ -90,7 +90,7 @@ async def qb(ctx, *args):
                     elif answer.content.startswith(".help"):
                         pass
                     elif answer.content.startswith("//"):
-                        pass
+                        answer = await client.wait_for('message', check = check)
                     if answer.content == ".end":
                         ppb = user_dict[ctx.author.id]['score'] / q
                         ppb = round(ppb, 2)
@@ -132,10 +132,6 @@ async def qb(ctx, *args):
                             break
                         else:
                             data["correct"] = 0
-
-                    with open("questions.csv", "a") as file:
-                        json.dump(data, file)
-                        file.write(", \n")
                 
             except KeyError:
                 del user_dict[ctx.author.id]
